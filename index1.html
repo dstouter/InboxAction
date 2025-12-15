@@ -1,0 +1,705 @@
+<!<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InboxAction – Turn Emails into Action</title>
+  <meta name="description" content="InboxAction turns your email into a clear list of tasks, deadlines, and follow‑ups – automatically. Connect Gmail, get your day organized in minutes.">
+  <style>
+    :root {
+      --bg: #060714;
+      --bg-alt: #0d0f1f;
+      --card: #111325;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79,70,229,0.12);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --radius-xl: 18px;
+      --radius-lg: 12px;
+      --shadow-soft: 0 18px 45px rgba(15,23,42,0.65);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Inter", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%);
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    /* nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #a5b4fc, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 0 25px rgba(79,70,229,0.65);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links span {
+      cursor: pointer;
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav-pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      color: var(--muted);
+    }
+
+    /* hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.3);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .hero-eyebrow span {
+      background: rgba(34,197,94,0.16);
+      color: #bbf7d0;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(120deg,#a5b4fc,#6366f1,#38bdf8);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 20px;
+    }
+
+    .hero-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .hero-metrics strong {
+      color: var(--text);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(79,70,229,0.7);
+    }
+
+    .btn-ghost {
+      background: rgba(15,23,42,0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.35);
+      padding: 10px 18px;
+      font-size: 14px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .hero-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* hero card (right) */
+    .hero-card {
+      background: radial-gradient(circle at top,#1f2937,#020617);
+      border-radius: 22px;
+      border: 1px solid rgba(148,163,184,0.25);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero-card-pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.3);
+      font-size: 11px;
+    }
+
+    .inbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 9px;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(51,65,85,0.8);
+      margin-bottom: 8px;
+    }
+
+    .inbox-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: linear-gradient(135deg,#22c55e,#4ade80);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 14px;
+    }
+
+    .inbox-main {
+      flex: 1;
+    }
+
+    .inbox-from {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .inbox-subject {
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .inbox-preview {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill-task {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.18);
+      color: #e0f2fe;
+      border: 1px solid rgba(56,189,248,0.6);
+      align-self: center;
+    }
+
+    .tasks-panel {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(148,163,184,0.4);
+      font-size: 12px;
+    }
+
+    .tasks-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:6px;
+    }
+
+    .tasks-list {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .task-chip {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background: rgba(15,23,42,0.9);
+      border-radius: 999px;
+      padding: 5px 9px;
+      border: 1px solid rgba(30,64,175,0.9);
+      font-size: 11px;
+    }
+
+    .task-chip span:first-child {
+      color: #e5e7eb;
+    }
+
+    .task-chip span:last-child {
+      color: #bfdbfe;
+    }
+
+    /* sections */
+    .section {
+      margin-bottom: 56px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 22px;
+      max-width: 560px;
+    }
+
+    .grid-3 {
+      display:grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap:18px;
+    }
+
+    .card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 18px;
+      border: 1px solid rgba(31,41,55,0.9);
+    }
+
+    .card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-tag {
+      font-size: 11px;
+      display:inline-flex;
+      padding: 3px 8px;
+      border-radius:999px;
+      background: rgba(15,23,42,0.9);
+      border:1px solid rgba(55,65,81,0.9);
+      color: var(--muted);
+      margin-bottom:7px;
+    }
+
+    .how-grid {
+      display:grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .how-step-num {
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      background: var(--accent-soft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      color:#c7d2fe;
+      margin-bottom:8px;
+    }
+
+    .badge-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      font-size:11px;
+      margin-top:6px;
+    }
+
+    .badge {
+      padding:3px 8px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(51,65,85,0.9);
+      color:var(--muted);
+    }
+
+    .faq {
+      display:grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap:20px;
+    }
+
+    .faq-item {
+      margin-bottom:14px;
+    }
+
+    .faq-item h3 {
+      font-size:14px;
+      margin-bottom:4px;
+    }
+
+    .faq-item p {
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .footer {
+      border-top: 1px solid rgba(31,41,55,0.95);
+      padding-top: 16px;
+      font-size: 11px;
+      color: var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    /* responsive */
+    @media (max-width: 880px) {
+      .hero {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-links {
+        display:none;
+      }
+      .hero {
+        margin-bottom: 40px;
+      }
+      .grid-3, .how-grid, .faq {
+        grid-template-columns: minmax(0,1fr);
+      }
+      .page {
+        padding-inline: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- nav -->
+    <header class="nav">
+      <div class="logo">
+        <div class="logo-mark">↪</div>
+        <span>InboxAction</span>
+      </div>
+      <div class="nav-links">
+        <span onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How it works</span>
+        <span onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Features</span>
+        <span onclick="document.getElementById('faq').scrollIntoView({behavior:'smooth'})">FAQ</span>
+      </div>
+      <div class="nav-cta">
+        <div class="nav-pill">Early access · limited spots</div>
+      </div>
+    </header>
+
+    <!-- hero -->
+    <section class="hero">
+      <div>
+        <div class="hero-eyebrow">
+          <span>New</span>
+          Inbox → tasks, automatically
+        </div>
+        <h1 class="hero-title">
+          Turn messy email into a clear <span>to‑do list</span>.
+        </h1>
+        <p class="hero-subtitle">
+          InboxAction connects to your inbox, finds real tasks and deadlines inside your emails, and turns them into an organized action list – before you forget them.
+        </p>
+        <div class="hero-metrics">
+          <div><strong>0 setup</strong> – connect Gmail in seconds</div>
+          <div><strong>1 inbox</strong> → all your tasks</div>
+          <div><strong>Daily summaries</strong> in your email</div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">
+            Get early access
+          </button>
+          <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
+            See how it works
+          </button>
+        </div>
+        <div class="hero-note">
+          No credit card. Read‑only access. You stay in control of your inbox.
+        </div>
+      </div>
+
+      <!-- hero UI mock -->
+      <aside class="hero-card" aria-hidden="true">
+        <div class="hero-card-header">
+          <span>Today · Gmail</span>
+          <span class="hero-card-pill">AI extracting tasks…</span>
+        </div>
+
+        <div class="inbox-row">
+          <div class="inbox-avatar">P</div>
+          <div class="inbox-main">
+            <div class="inbox-from">Project Lead · 8:41 AM</div>
+            <div class="inbox-subject">Sprint review this Friday</div>
+            <div class="inbox-preview">
+              Can you pull the latest numbers and send a quick summary by Thursday evening?
+            </div>
+          </div>
+          <div class="pill-task">2 tasks found</div>
+        </div>
+
+        <div class="inbox-row">
+          <div class="inbox-avatar" style="background:linear-gradient(135deg,#6366f1,#22d3ee);">C</div>
+          <div class="inbox-main">
+            <div class="inbox-from">Class Portal · 7:03 AM</div>
+            <div class="inbox-subject">Assignment due next week</div>
+            <div class="inbox-preview">
+              Your lab report is due by Tuesday 11:59 PM. Please upload your work before the deadline.
+            </div>
+          </div>
+          <div class="pill-task">Deadline</div>
+        </div>
+
+        <div class="tasks-panel">
+          <div class="tasks-header">
+            <span>InboxAction · Today’s actions</span>
+            <span style="font-size:11px;color:var(--muted);">Synced now</span>
+          </div>
+          <div class="tasks-list">
+            <div class="task-chip">
+              <span>Send sprint summary</span>
+              <span>Due Thu 6 PM</span>
+            </div>
+            <div class="task-chip">
+              <span>Finish lab report</span>
+              <span>Due Tue 11:59 PM</span>
+            </div>
+            <div class="task-chip">
+              <span>Reply to client proposal</span>
+              <span>Follow‑up in 2 days</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- features -->
+    <section id="features" class="section">
+      <h2 class="section-title">Why your future self will thank you</h2>
+      <p class="section-subtitle">
+        InboxAction is for students, founders, and busy humans who live in their inbox but hate managing it. No new workflow. No new app to babysit. Just less chaos.
+      </p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-tag">01 · AI task detection</div>
+          <h3>Your inbox secretly contains your to‑do list.</h3>
+          <p>
+            InboxAction scans new emails and pulls out real tasks, deadlines, and follow‑ups — not marketing noise. You decide what to keep with one click.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-tag">02 · Deadlines that don’t slip</div>
+          <h3>Due dates are caught, not forgotten.</h3>
+          <p>
+            When someone says “by Friday” or “before class”, InboxAction turns that into an actual due date with reminders, so it doesn’t vanish in your inbox.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-tag">03 · Daily summary</div>
+          <h3>Wake up to a simple plan.</h3>
+          <p>
+            Every morning, you get a short email that says: “Here’s what matters today.” No more scrolling through 40 threads to figure it out.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- how it works -->
+    <section id="how" class="section">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-subtitle">
+        Set up is under 2 minutes. After that, InboxAction quietly turns your email into a clean action list in the background.
+      </p>
+      <div class="how-grid">
+        <div class="card">
+          <div class="how-step-num">1</div>
+          <h3>Connect your inbox</h3>
+          <p>
+            Sign in with Google and grant read‑only access. We don’t send emails for you or touch drafts — we just read what’s already there.
+          </p>
+          <div class="badge-row">
+            <div class="badge">Gmail support first</div>
+            <div class="badge">Read‑only</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="how-step-num">2</div>
+          <h3>We detect action items</h3>
+          <p>
+            As new emails arrive, InboxAction finds phrases like “can you…”, “please send…”, “due by…”, and turns them into tasks with suggested due dates.
+          </p>
+          <div class="badge-row">
+            <div class="badge">Tasks</div>
+            <div class="badge">Deadlines</div>
+            <div class="badge">Follow‑ups</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="how-step-num">3</div>
+          <h3>You review & done</h3>
+          <p>
+            Open your InboxAction dashboard or daily summary, confirm what matters, and mark things as done. Your inbox stays email‑ish. We keep the tasks.
+          </p>
+          <div class="badge-row">
+            <div class="badge">1‑click confirm</div>
+            <div class="badge">Daily digest</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- waitlist -->
+    <section id="waitlist" class="section">
+      <h2 class="section-title">Get early access</h2>
+      <p class="section-subtitle">
+        We’re inviting a small group of early users to shape InboxAction. Drop your email and we’ll send you an invite link when your spot opens.
+      </p>
+      <div class="card" style="text-align:center;">
+        <!-- Replace this iframe src with your actual Google Form or Airtable form link -->
+        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">
+          Join the waitlist (we’ll only email you about this product).
+        </p>
+        <iframe
+          src="https://docs.google.com/forms/d/e/your-form-id/viewform?embedded=true"
+          width="100%"
+          height="360"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          style="border-radius:12px;border:1px solid rgba(31,41,55,0.9);background:#020617;"
+        >
+          Loading…
+        </iframe>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <h2 class="section-title">FAQ</h2>
+      <div class="faq">
+        <div>
+          <div class="faq-item">
+            <h3>Is this safe for my inbox?</h3>
+            <p>
+              Yes. InboxAction connects via official provider APIs and uses read‑only access for your emails. It doesn’t send mail or change anything in your inbox.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>Does it work with Outlook or other providers?</h3>
+            <p>
+              Right now we’re starting with Gmail. If you want Outlook, iCloud, or others, tell us in the waitlist form — we’ll prioritize based on demand.
+            </p>
+          </div>
+        </div>
+        <div>
+          <div class="faq-item">
+            <h3>How much will it cost?</h3>
+            <p>
+              During early access, InboxAction will be free while we learn and improve. Later, we expect simple, student‑friendly pricing with a generous free tier.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>Who is InboxAction for?</h3>
+            <p>
+              Students, founders, freelancers, and anyone who lives in email and keeps missing tasks, deadlines, or follow‑ups buried in threads.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer">
+      <span>© <span id="year"></span> InboxAction</span>
+      <span>Built by two humans who were tired of drowning in email.</span>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
