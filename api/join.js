@@ -1,6 +1,9 @@
 import { Redis } from '@upstash/redis';
 
-const redis = Redis.fromEnv();
+const redis = new Redis({
+  url: 'https://popular-griffon-23583.upstash.io', // <- copy from Upstash
+  token: 'AVwfAAIncDFhYTE0NjEzZjIyYWU0NDdhODAwMGE5NDMxYjE3MjAzY3AxMjM1ODM',                   // <- copy from Upstash
+});
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,14 +11,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Vercel parses JSON body for you -> req.body is already an object
-    const { email } = req.body;
-
+    const { email } = req.body; // Vercel already parsed JSON
     if (!email || !email.includes('@')) {
       return res.status(400).json({ error: 'Invalid email' });
     }
 
-    // Save email to Redis list "waitlist"
     await redis.lpush('waitlist', email);
 
     return res.status(200).json({ message: 'Success! Added to waitlist.' });
