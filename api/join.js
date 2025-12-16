@@ -1,30 +1,19 @@
 import { Redis } from '@upstash/redis';
 
-// Connect to Redis using your Vercel env vars
 const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
   try {
-    // Safely handle both string and object bodies
-    const body =
-      typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+    const value = `TEST-${Date.now()}`;
 
-    const { email } = body;
+    // Try to write a simple test value
+    await redis.lpush('waitlist', value);
 
-    if (!email || !email.includes('@')) {
-      return res.status(400).json({ error: 'Invalid email' });
-    }
-
-    // Save email to Redis list "waitlist"
-    await redis.lpush('waitlist', email);
-
-    return res.status(200).json({ message: 'Success! Added to waitlist.' });
+    return res.status(200).json({ ok: true, pushed: value });
   } catch (err) {
-    console.error('JOIN API ERROR:', err);
-    return res.status(500).json({ error: 'Server error' });
+    console.error('TEST JOIN ERROR:', err);
+    return res
+      .status(500)
+      .json({ ok: false, error: String(err) });
   }
 }
