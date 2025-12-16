@@ -4,16 +4,17 @@ const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
   try {
-    const value = `TEST-${Date.now()}`;
+    const values = await redis.lrange('waitlist', 0, -1);
 
-    // Try to write a simple test value
-    await redis.lpush('waitlist', value);
-
-    return res.status(200).json({ ok: true, pushed: value });
+    return res.status(200).json({
+      ok: true,
+      values,
+    });
   } catch (err) {
-    console.error('TEST JOIN ERROR:', err);
-    return res
-      .status(500)
-      .json({ ok: false, error: String(err) });
+    console.error('JOIN READ ERROR:', err);
+    return res.status(500).json({
+      ok: false,
+      error: String(err),
+    });
   }
 }
