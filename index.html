@@ -1052,3 +1052,26 @@
 </body>
 </html>
 
+<form id="waitlistForm">
+  <input type="email" id="emailInput" placeholder="dpstouter@gmail.com" required />
+  <button type="submit">Join Waitlist</button>
+</form>
+
+<script>
+  document.getElementById("waitlistForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("emailInput").value;
+
+    const res = await fetch("/api/join", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },   // ✅ REQUIRED
+      body: JSON.stringify({ email }),                   // correct
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error);
+  });
+</script>
+
+
