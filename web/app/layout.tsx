@@ -1,9 +1,16 @@
+import type { ReactNode } from "react";
 import Providers from "./providers";
+
+export const metadata = {
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">
@@ -13,4 +20,3 @@ export default function RootLayout({
     </html>
   );
 }
-
